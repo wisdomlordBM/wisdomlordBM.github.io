@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Onyebuchi I. — Full-Stack Developer</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface2: #1a1a1a;
+    --border: #222222;
+    --accent: #00e5a0;
+    --accent2: #005c41;
+    --text: #f0f0f0;
+    --muted: #666666;
+    --muted2: #444444;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* GRID NOISE BACKGROUND */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.2rem 2rem;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+  .nav-links { display: flex; gap: 2rem; }
+  .nav-links a {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 8rem 0 4rem;
+  }
+  .hero-inner { width: 100%; }
+
+  .hero-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .hero-tag::before {
+    content: '';
+    display: block; width: 32px; height: 1px;
+    background: var(--accent);
+  }
+
+  .hero h1 {
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin-bottom: 2rem;
+  }
+  .hero h1 span {
+    color: transparent;
+    -webkit-text-stroke: 1px var(--muted2);
+  }
+
+  .hero-desc {
+    max-width: 520px;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--muted);
+    margin-bottom: 3rem;
+    font-weight: 400;
+  }
+
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--accent);
+    color: #000;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.9rem 1.8rem;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-primary:hover { background: #fff; }
+
+  .btn-outline {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.9rem 1.8rem;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-outline:hover { border-color: var(--text); color: var(--text); }
+
+  /* STACK BAR */
+  .stack-bar {
+    margin-top: 5rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    display: flex; gap: 2.5rem; flex-wrap: wrap; align-items: center;
+  }
+  .stack-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .stack-items { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+  .stack-item {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 0.4rem 0.85rem;
+    letter-spacing: 0.05em;
+  }
+
+  /* SECTIONS */
+  section { padding: 6rem 0; }
+
+  .section-header {
+    display: flex; align-items: center; gap: 1.5rem;
+    margin-bottom: 3.5rem;
+  }
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+  }
+  .section-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+  .section-line { flex: 1; height: 1px; background: var(--border); }
+
+  /* PROJECT CARD */
+  .project-card {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    margin-bottom: 1.5rem;
+    transition: border-color 0.3s;
+    overflow: hidden;
+  }
+  .project-card:hover { border-color: var(--accent2); }
+
+  .project-top {
+    padding: 2rem 2rem 0;
+    display: flex; justify-content: space-between; align-items: flex-start;
+    gap: 1rem;
+  }
+  .project-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.75rem;
+  }
+  .project-name {
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+  .project-type {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+  }
+
+  .project-body { padding: 1.5rem 2rem 2rem; }
+  .project-desc {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+    max-width: 640px;
+  }
+
+  .feature-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1.75rem;
+  }
+  .feature-item {
+    display: flex; align-items: flex-start; gap: 0.6rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .feature-dot {
+    width: 5px; height: 5px;
+    background: var(--accent);
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 0.45rem;
+  }
+
+  .project-footer {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .project-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 0.3rem 0.7rem;
+    letter-spacing: 0.05em;
+  }
+  .project-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    display: flex; align-items: center; gap: 0.4rem;
+    transition: gap 0.2s;
+  }
+  .project-link:hover { gap: 0.7rem; }
+
+  /* ABOUT */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+  @media (max-width: 640px) { .about-grid { grid-template-columns: 1fr; } }
+
+  .about-text {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--muted);
+  }
+  .about-text p { margin-bottom: 1rem; }
+  .about-text strong { color: var(--text); font-weight: 600; }
+
+  .skills-col {}
+  .skill-group { margin-bottom: 2rem; }
+  .skill-group-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  .skill-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .skill-pill {
+    font-size: 0.78rem;
+    color: var(--text);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 0.35rem 0.8rem;
+  }
+
+  /* CONTACT */
+  .contact-box {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    padding: 3rem;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 2rem; flex-wrap: wrap;
+  }
+  .contact-left {}
+  .contact-heading {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+  .contact-sub {
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-weight: 400;
+  }
+  .contact-links { display: flex; flex-direction: column; gap: 0.75rem; align-items: flex-end; }
+  .contact-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    display: flex; align-items: center; gap: 0.5rem;
+    transition: color 0.2s;
+  }
+  .contact-link:hover { color: var(--accent); }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem 0;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  footer p {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up { animation: fadeUp 0.7s ease both; }
+  .delay-1 { animation-delay: 0.1s; }
+  .delay-2 { animation-delay: 0.2s; }
+  .delay-3 { animation-delay: 0.3s; }
+  .delay-4 { animation-delay: 0.4s; }
+  .delay-5 { animation-delay: 0.5s; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">onyebuchi.dev</div>
+  <div class="nav-links">
+    <a href="#projects">Work</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<main>
+  <div class="container">
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="hero-tag fade-up">Available for remote work</div>
+        <h1 class="fade-up delay-1">
+          Full&#8209;Stack<br/>
+          <span>Developer</span>
+        </h1>
+        <p class="hero-desc fade-up delay-2">
+          I build complete web applications — from database architecture to user interface.
+          Specializing in <strong style="color:var(--text)">ASP.NET Core MVC</strong>, <strong style="color:var(--text)">React</strong>, and <strong style="color:var(--text)">REST APIs</strong> with 3+ years of professional experience.
+        </p>
+        <div class="hero-actions fade-up delay-3">
+          <a href="#projects" class="btn-primary">View My Work →</a>
+          <a href="#contact" class="btn-outline">Hire Me</a>
+        </div>
+
+        <div class="stack-bar fade-up delay-4">
+          <span class="stack-label">Stack</span>
+          <div class="stack-items">
+            <span class="stack-item">ASP.NET Core</span>
+            <span class="stack-item">React</span>
+            <span class="stack-item">C#</span>
+            <span class="stack-item">REST APIs</span>
+            <span class="stack-item">SQL Server</span>
+            <span class="stack-item">Entity Framework</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <span class="section-title">Selected Work</span>
+        <div class="section-line"></div>
+      </div>
+
+      <!-- Project 1 -->
+      <div class="project-card">
+        <div class="project-top">
+          <div>
+            <div class="project-num">PROJECT / 001</div>
+            <div class="project-name">Job Portal & Recruitment Platform</div>
+            <div class="project-type">Full-Stack Web Application</div>
+          </div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">
+            A complete end-to-end recruitment platform that handles everything from public job listings to automated candidate screening. Companies post jobs, candidates apply and take timed skill assessments that are auto-marked and scored — giving employers instant performance data before they even open a CV.
+          </p>
+          <div class="feature-list">
+            <div class="feature-item"><div class="feature-dot"></div>Public job listings with search & filter</div>
+            <div class="feature-item"><div class="feature-dot"></div>Candidate registration & secure login</div>
+            <div class="feature-item"><div class="feature-dot"></div>Timed skill assessment per job role</div>
+            <div class="feature-item"><div class="feature-dot"></div>Auto-marking with instant % score</div>
+            <div class="feature-item"><div class="feature-dot"></div>CV upload after assessment</div>
+            <div class="feature-item"><div class="feature-dot"></div>Admin dashboard — scores, CVs, decisions</div>
+            <div class="feature-item"><div class="feature-dot"></div>Accept/reject with user notifications</div>
+            <div class="feature-item"><div class="feature-dot"></div>Multi-role auth (Admin / Candidate)</div>
+          </div>
+          <div class="project-footer">
+            <div class="project-tags">
+              <span class="tag">ASP.NET Core MVC</span>
+              <span class="tag">C#</span>
+              <span class="tag">SQL Server</span>
+              <span class="tag">Entity Framework</span>
+              <span class="tag">ASP.NET Identity</span>
+              <span class="tag">Razor Views</span>
+            </div>
+            <a href="https://github.com/wisdomlordBM/job-portal-mvc" target="_blank" class="project-link">View on GitHub →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project 2 placeholder -->
+      <div class="project-card" style="opacity:0.45;">
+        <div class="project-top">
+          <div>
+            <div class="project-num">PROJECT / 002</div>
+            <div class="project-name">More Projects Coming Soon</div>
+            <div class="project-type">In Progress</div>
+          </div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Currently working on additional projects to showcase. Check back soon or view my GitHub for latest activity.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <span class="section-title">About</span>
+        <div class="section-line"></div>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-text">
+          <p>I'm <strong>Onyebuchi</strong>, a full-stack developer based in Lagos, Nigeria with <strong>3+ years of experience</strong> building production web applications.</p>
+          <p>I've worked in professional development teams and understand how real software gets built — clean architecture, proper version control, and code that other developers can maintain.</p>
+          <p>I specialize in <strong>ASP.NET Core MVC</strong> for backend systems and <strong>React</strong> for frontend interfaces, connecting everything through well-designed <strong>REST APIs</strong>.</p>
+          <p>I'm available for <strong>remote freelance work</strong> — whether that's building something from scratch, adding features to an existing system, or fixing bugs under pressure.</p>
+        </div>
+
+        <div class="skills-col">
+          <div class="skill-group">
+            <div class="skill-group-label">Backend</div>
+            <div class="skill-pills">
+              <span class="skill-pill">ASP.NET Core MVC</span>
+              <span class="skill-pill">C#</span>
+              <span class="skill-pill">REST APIs</span>
+              <span class="skill-pill">Entity Framework</span>
+              <span class="skill-pill">ASP.NET Identity</span>
+            </div>
+          </div>
+          <div class="skill-group">
+            <div class="skill-group-label">Frontend</div>
+            <div class="skill-pills">
+              <span class="skill-pill">React</span>
+              <span class="skill-pill">HTML/CSS</span>
+              <span class="skill-pill">JavaScript</span>
+              <span class="skill-pill">Razor Views</span>
+            </div>
+          </div>
+          <div class="skill-group">
+            <div class="skill-group-label">Database & Tools</div>
+            <div class="skill-pills">
+              <span class="skill-pill">SQL Server</span>
+              <span class="skill-pill">Git & GitHub</span>
+              <span class="skill-pill">Visual Studio</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <span class="section-title">Contact</span>
+        <div class="section-line"></div>
+      </div>
+
+      <div class="contact-box">
+        <div class="contact-left">
+          <div class="contact-heading">Let's build<br/>something.</div>
+          <div class="contact-sub">Open to remote freelance & contract work</div>
+        </div>
+        <div class="contact-links">
+          <a href="https://github.com/wisdomlordBM" target="_blank" class="contact-link">
+            ↗ github.com/wisdomlordBM
+          </a>
+          <a href="https://www.upwork.com/freelancers/~onyebuchi" target="_blank" class="contact-link">
+            ↗ Hire me on Upwork
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<div class="container">
+  <footer>
+    <p>© 2026 Onyebuchi I. — Full-Stack Developer</p>
+    <p>Lagos, Nigeria · Available Remotely</p>
+  </footer>
+</div>
+
+</body>
+</html>
